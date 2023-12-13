@@ -42,12 +42,12 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
         if (args.length == 0) {
-            if (sender.hasPermission("mclogs.upload")) {
+            if (sender.hasPermission("mcn.upload")) {
                 share(sender,"latest.log");
             }
             else {
                 plugin.adventure().sender(sender).sendMessage(Component
-                        .text("You don't have the permissions to use the command!")
+                        .text("Nemáš oprávnění k použití příkazu!")
                         .color(NamedTextColor.RED)
                 );
             }
@@ -58,7 +58,7 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
         if (subCommand == null) return false;
         if (subCommand.getPermission() != null && !sender.hasPermission(subCommand.getPermission())) {
             plugin.adventure().sender(sender).sendMessage(Component
-                    .text("You don't have the permissions to use the command!")
+                    .text("Nemáš oprávnění k použití příkazu!")
                     .color(NamedTextColor.RED)
             );
             return true;
@@ -68,7 +68,7 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
 
     public void share(CommandSender commandSender, String file) {
         Logger logger = plugin.getLogger();
-        logger.log(Level.INFO, "Sharing " + file + "...");
+        logger.log(Level.INFO, "Sdílení " + file + "...");
 
         Path directory = Paths.get(plugin.getRunDir());
         Path logs = directory.resolve("logs");
@@ -90,7 +90,7 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
         if (!log.toFile().exists() || !isInAllowedDirectory
                 || !log.getFileName().toString().matches(Log.ALLOWED_FILE_NAME_PATTERN.pattern())) {
             plugin.adventure().sender(commandSender).sendMessage(Component
-                    .text("There is no log or crash report with the name '" + file + "'. Use '/mclogs list' to list all logs.")
+                    .text("Neexistuje žádný log nebo nebo crash report s názvem " + file + "'. Pro zobrazení všech logů použij příkaz '/log list'.")
                     .color(NamedTextColor.RED)
             );
             return;
@@ -101,29 +101,29 @@ public class CommandMclogs implements CommandExecutor, TabExecutor {
             response.whenComplete((res, ex) -> {
                 if(ex != null) {
                     plugin.adventure().sender(commandSender).sendMessage(Component
-                            .text("An error occurred. Check your log for more details.")
+                            .text("Došlo k chybě. Podívejte se do logu na další podrobnosti.")
                             .color(NamedTextColor.RED)
                     );
-                    logger.log(Level.SEVERE,"An error occurred while reading your log", ex);
+                    logger.log(Level.SEVERE,"Při čtení logu došlo k chybě", ex);
                     return;
                 }
                 res.setClient(plugin.getMclogsClient());
                 plugin.adventure().sender(commandSender).sendMessage(Component
-                        .text("Your log has been uploadded:")
+                        .text("Tvůj log byl nahrán:")
                         .color(NamedTextColor.GREEN)
                         .appendSpace()
                         .append(Component.text(res.getUrl())
                                 .clickEvent(ClickEvent.openUrl(res.getUrl()))
-                                .color(NamedTextColor.AQUA)));
+                                .color(NamedTextColor.GRAY)));
 
             });
         }
         catch (IOException e) {
             plugin.adventure().sender(commandSender).sendMessage(Component
-                    .text("An error occurred. Check your log for more details.")
+                    .text("Došlo k chybě. Podívej se do logu na další podrobnosti.")
                     .color(NamedTextColor.RED)
             );
-            logger.log(Level.SEVERE,"An error occurred while reading your log", e);
+            logger.log(Level.SEVERE,"Při čtení logu došlo k chybě", e);
         }
     }
 

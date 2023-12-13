@@ -20,31 +20,31 @@ public class MclogsListCommand extends SubCommand {
 
     @Override
     String getPermission() {
-        return "mclogs.list";
+        return "mcn.list";
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         mclogs.plugin.adventure().sender(sender).sendMessage(Component.empty()
-                .append(generateList("logs", mclogs.listLogs()))
+                .append(generateList("logy", mclogs.listLogs()))
                 .appendNewline()
                 .appendNewline()
-                .append(generateList("crash-reports", mclogs.listCrashReports()))
+                .append(generateList("pády serveru", mclogs.listCrashReports()))
         );
         return true;
     }
 
     protected @NotNull Component generateList(String name, String[] entries) {
         if (entries.length == 0) {
-            return Component.text("No " + name + " available.");
+            return Component.text("Žádné " + name + " nejsou dostupné.");
         }
         Component list = Component.empty().append(Component
-                .text("Available " + name + ":")
+                .text("Dostupné " + name + ":")
                 .decorate(TextDecoration.UNDERLINED));
         for (String log : entries) {
             list = list.appendNewline().append(Component
                     .text(log)
-                    .clickEvent(ClickEvent.runCommand("/mclogs share " + log))
+                    .clickEvent(ClickEvent.runCommand("/log share " + log))
             );
         }
 
